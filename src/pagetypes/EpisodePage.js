@@ -1,5 +1,15 @@
 import React, { Component } from "react";
 
+import {
+  Wrapper,
+  Container,
+  ContentWrapper,
+  Thumbnail,
+  BackgroundImg
+} from "../styles/scafolding";
+
+import { Title, Description } from "../styles/text";
+
 class EpisodePage extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +46,7 @@ class EpisodePage extends Component {
   render() {
     const { error, isLoaded, data } = this.state;
 
-    function createDescription() {
+    function createSummary() {
       return { __html: data.summary };
     }
 
@@ -46,10 +56,23 @@ class EpisodePage extends Component {
       return <div>Loading content please wait...</div>;
     } else {
       return (
-        <div>
-          {data.name}
-          <div dangerouslySetInnerHTML={createDescription()} />
-        </div>
+        <Wrapper>
+          <Container>
+            <Title>
+              S{data.season}E{data.number} - {data.name}
+            </Title>
+            <ContentWrapper>
+              <Thumbnail src={data.image.medium} alt={data.name} />
+              <div>
+                <Title as="h4">
+                  First airdate: {data.airdate} at {data.airtime}
+                </Title>
+                <Description dangerouslySetInnerHTML={createSummary()} />
+              </div>
+            </ContentWrapper>
+          </Container>
+          <BackgroundImg image={data.image.original} role="img" />
+        </Wrapper>
       );
     }
   }

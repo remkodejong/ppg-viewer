@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import ShowPage from "./components/ShowPage";
-import EpisodePage from "./components/EpisodePage";
+import ShowPage from "./pagetypes/ShowPage";
+import EpisodePage from "./pagetypes/EpisodePage";
 
 class App extends Component {
   // componentDidMount() {}
@@ -11,10 +10,10 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <main className="App">
+        <Switch>
           <Route exact path="/" component={ShowPage} />
           <Route path="/episode/:season-:number" component={EpisodePage} />
-        </main>
+        </Switch>
       </Router>
     );
   }
