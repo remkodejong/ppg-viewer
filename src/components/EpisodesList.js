@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import EpisodeTile from "./EpisodeTile";
 
+import { mqFrom } from "../styles/mediaqueries";
 import { Title } from "../styles/text";
 
 class EpisodesList extends Component {
@@ -29,21 +30,35 @@ const ListWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: auto;
-  padding-top: 20px;
+  max-height: 30vh;
+  overflow-y: scroll;
   background-color: rgba(0, 0, 0, 0.1);
-  overflow-x: scroll;
+
+  ${mqFrom.M`
+    padding-top: 20px;
+    overflow-y: auto;
+    overflow-x: scroll;
+  `}
 `;
 
 const List = styled.ul`
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   margin: 0;
   padding: 0;
   list-style: none;
 
-  li {
-    margin: 0 10px;
+  li:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.1);
   }
+
+  ${mqFrom.M`
+    flex-flow: row nowrap;
+    
+    li {
+      margin: 0 10px;
+    }
+  `}
 `;
 
 export default EpisodesList;

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import { mqFrom } from "../styles/mediaqueries";
 import { Title } from "../styles/text";
 
 class EpisodeTile extends Component {
@@ -26,23 +27,33 @@ class EpisodeTile extends Component {
 }
 
 const EpisodeThumbnail = styled.img`
-  display: block;
-  transform: scale(1);
-  transition: transform 0.2s ease-in-out;
+  display: none;
+
+  ${mqFrom.M`
+    display: block;
+    transform: scale(1);
+    transition: transform 0.2s ease-in-out;   
+  `}
 `;
 
 const EpisodeLink = styled(Link)`
   text-decoration: none;
 
-  &:hover {
-    ${EpisodeThumbnail} {
-      transform: scale(1.1);
-    }
-
-    ${Title} {
-      transform: translateY(10px);
-    }
+  ${Title} {
+    margin: 10px 0;
   }
+
+  ${mqFrom.M`
+    &:hover {
+      ${EpisodeThumbnail} {
+        transform: scale(1.1);
+      }
+
+      ${Title} {
+        transform: translateY(10px);
+      }
+    }
+  `}
 `;
 
 export default EpisodeTile;

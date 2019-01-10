@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mqFrom } from "./mediaqueries";
 
 export const Title = styled.h1`
   color: #fff;
@@ -8,7 +9,12 @@ export const Title = styled.h1`
 
 export const Description = styled.p`
   color: #fff;
-  font-size: 1.3em;
-  line-height: 1.3;
-  max-width: 90%;
+  font-size: 1.1em;
+  line-height: 1.1;
+
+  ${mqFrom.M`
+    font-size: 1.3em;
+    line-height: 1.3;
+    max-width: 90%;
+  `}
 `;

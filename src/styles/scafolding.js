@@ -2,6 +2,8 @@
 
 import styled from "styled-components";
 
+import { mqFrom } from "./mediaqueries";
+
 export const Wrapper = styled.div`
   box-sizing: border-box;
   background-color: hotpink;
@@ -18,6 +20,7 @@ export const Container = styled.div`
   box-sizing: border-box;
   position: relative;
   max-width: 1024px;
+  width: 100%;
   padding: 40px 40px 20px 40px;
   border: 1px solid hotpink;
   background-color: rgba(0, 0, 0, 0.5);
@@ -33,9 +36,11 @@ export const Thumbnail = styled.img`
 
 export const ContentWrapper = styled.div`
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   margin-bottom: 20px;
   align-items: flex-start;
+
+  ${mqFrom.M`flex-flow: row nowrap;`}
 `;
 
 export const BackgroundImg = styled.div`

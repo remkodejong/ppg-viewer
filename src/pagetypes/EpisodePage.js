@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import {
   Wrapper,
@@ -68,6 +70,7 @@ class EpisodePage extends Component {
                   First airdate: {data.airdate} at {data.airtime}
                 </Title>
                 <Description dangerouslySetInnerHTML={createSummary()} />
+                <GoBackLink to="/">&#171; Back to the show</GoBackLink>
               </div>
             </ContentWrapper>
           </Container>
@@ -77,5 +80,20 @@ class EpisodePage extends Component {
     }
   }
 }
+
+const GoBackLink = styled(Link)`
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.3em;
+  font-weight: bold;
+  background-color: purple;
+  padding: 10px 15px;
+  transition: background-color 0.2s ease-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: darkviolet;
+  }
+`;
 
 export default EpisodePage;
