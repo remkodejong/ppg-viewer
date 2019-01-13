@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import { Subscribe } from "unstated";
+import StateContainer from "../StateContainer";
+
 import {
   Wrapper,
   Container,
@@ -13,73 +16,75 @@ import {
 import { Title, Description } from "../styles/text";
 
 class EpisodePage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      data: {}
-    };
+  componentDidMount() {
+    const { getEpisode } = this.props;
+    const { params } = this.props.match;
+
+    getEpisode(params.season, params.number);
   }
 
-  componentDidMount() {
-    fetch(
-      `http://api.tvmaze.com/shows/6771/episodebynumber?season=${
-        this.props.match.params.season
-      }&number=${this.props.match.params.number}`
-    )
-      .then(res => res.json())
-      .then(
-        result => {
-          this.setState({
-            isLoaded: true,
-            data: result
-          });
-        },
-        error => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
+  //  THIS DOESN'T WORK AS INTENDED
+  // shouldComponentUpdate(nextProps) {
+  //   const { getEpisode } = this.props;
+  //   const { url } = this.props.match;
+  //   if (nextProps.match.url !== url) {
+  //     getEpisode(nextProps.match.params.season, nextProps.match.params.number);
+  //   } else {
+  //     return;
+  //   }
+  // }
 
   render() {
-    const { error, isLoaded, data } = this.state;
+    const { currentEpisode } = this.props.state;
+    const { getEpisodeSummary } = this.props;
 
-    function createSummary() {
-      return { __html: data.summary };
-    }
-
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    if (!currentEpisode.name) {
       return <div>Loading content please wait...</div>;
-    } else {
-      return (
-        <Wrapper>
-          <Container>
-            <Title>
-              S{data.season}E{data.number} - {data.name}
-            </Title>
-            <ContentWrapper>
-              <Thumbnail src={data.image.medium} alt={data.name} />
-              <div>
-                <Title as="h4">
-                  First airdate: {data.airdate} at {data.airtime}
-                </Title>
-                <Description dangerouslySetInnerHTML={createSummary()} />
-                <GoBackLink to="/">&#171; Back to the show</GoBackLink>
-              </div>
-            </ContentWrapper>
-          </Container>
-          <BackgroundImg image={data.image.original} role="img" />
-        </Wrapper>
-      );
     }
+
+    return (
+      <Wrapper>
+        <Container>
+          <Title>
+            S{currentEpisode.season}E{currentEpisode.number} -{" "}
+            {currentEpisode.name}
+          </Title>
+          <ContentWrapper>
+            {currentEpisode.image ? (
+              <Thumbnail
+                src={currentEpisode.image && currentEpisode.image.medium}
+                alt={currentEpisode.name}
+              />
+            ) : (
+              <Thumbnail
+                src="http://static.tvmaze.com/images/no-img/no-img-landscape-text.png"
+                alt={currentEpisode.name}
+              />
+            )}
+            <div>
+              <Title as="h4">
+                First airdate: {currentEpisode.airdate} at{" "}
+                {currentEpisode.airtime}
+              </Title>
+              <Description dangerouslySetInnerHTML={getEpisodeSummary()} />
+              <GoBackLink to="/">&#171; Back to the show</GoBackLink>
+            </div>
+          </ContentWrapper>
+        </Container>
+        <BackgroundImg
+          image={currentEpisode.image && currentEpisode.image.original}
+          role="img"
+        />
+      </Wrapper>
+    );
   }
 }
+
+const ConnectedEpisodePage = routerProps => (
+  <Subscribe to={[StateContainer]}>
+    {state => <EpisodePage {...state} {...routerProps} />}
+  </Subscribe>
+);
 
 const GoBackLink = styled(Link)`
   text-decoration: none;
@@ -96,4 +101,4 @@ const GoBackLink = styled(Link)`
   }
 `;
 
-export default EpisodePage;
+export default ConnectedEpisodePage;

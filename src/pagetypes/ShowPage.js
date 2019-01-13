@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Subscribe } from "unstated";
 
+import StateContainer from "../StateContainer";
 import EpisodesList from "../components/EpisodesList";
 
 import {
@@ -14,69 +16,49 @@ import {
 import { Title, Description } from "../styles/text";
 
 class ShowPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      data: {}
-    };
-  }
-
   componentDidMount() {
-    fetch("http://api.tvmaze.com/shows/6771?embed=episodes")
-      .then(res => res.json())
-      .then(
-        result => {
-          this.setState({
-            isLoaded: true,
-            data: result
-          });
-        },
-        error => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
+    const { episodes } = this.props.state;
+    const { getShow } = this.props;
+    if (!episodes.length) {
+      getShow(6771);
+    }
   }
 
   render() {
-    const { error, isLoaded, data } = this.state;
+    const { loading, episodes, show } = this.props.state;
+    const { getShowSummary } = this.props;
 
-    function createSummary() {
-      return { __html: data.summary };
-    }
-
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    if (!episodes.length || loading) {
       return <div>Loading content please wait...</div>;
-    } else {
-      return (
-        <Wrapper>
-          <Container>
-            <Title>{data.name}</Title>
-            <ContentWrapper>
-              <Thumbnail src={data.image.medium} alt={data.name} />
-              <div>
-                <Title as="h4">Rating: {data.rating.average}</Title>
-                <Description dangerouslySetInnerHTML={createSummary()} />
-                <Title as="h4">Genres:</Title>
-                {data.genres.map(genre => (
-                  <Tag key={genre}>{genre}</Tag>
-                ))}
-              </div>
-            </ContentWrapper>
-            <EpisodesList episodes={data._embedded.episodes} />
-          </Container>
-          <BackgroundImg image={data.image.original} role="img" />
-        </Wrapper>
-      );
     }
+    return (
+      <Wrapper>
+        <Container>
+          <Title>{show.name}</Title>
+          <ContentWrapper>
+            <Thumbnail src={show.image.medium} alt={show.name} />
+            <div>
+              <Title as="h4">Rating: {show.rating.average}</Title>
+              <Description dangerouslySetInnerHTML={getShowSummary()} />
+              <Title as="h4">Genres:</Title>
+              {show.genres.map(genre => (
+                <Tag key={genre}>{genre}</Tag>
+              ))}
+            </div>
+          </ContentWrapper>
+          <EpisodesList episodes={episodes} />
+        </Container>
+        <BackgroundImg image={show.image.original} role="img" />
+      </Wrapper>
+    );
   }
 }
+
+const ConnectedShowPage = () => (
+  <Subscribe to={[StateContainer]}>
+    {state => <ShowPage {...state} />}
+  </Subscribe>
+);
 
 const Tag = styled.span`
   margin: 0 3px;
@@ -86,4 +68,4 @@ const Tag = styled.span`
   background: hotpink;
 `;
 
-export default ShowPage;
+export default ConnectedShowPage;
