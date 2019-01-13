@@ -9,6 +9,7 @@ import {
   Wrapper,
   Container,
   ContentWrapper,
+  DescriptionWrapper,
   Thumbnail,
   BackgroundImg
 } from "../styles/scafolding";
@@ -29,7 +30,13 @@ class ShowPage extends Component {
     const { getShowSummary } = this.props;
 
     if (!episodes.length || loading) {
-      return <div>Loading content please wait...</div>;
+      return (
+        <Wrapper>
+          <Container>
+            <Title as="span">Loading content please wait...</Title>
+          </Container>
+        </Wrapper>
+      );
     }
     return (
       <Wrapper>
@@ -37,14 +44,14 @@ class ShowPage extends Component {
           <Title>{show.name}</Title>
           <ContentWrapper>
             <Thumbnail src={show.image.medium} alt={show.name} />
-            <div>
+            <DescriptionWrapper>
               <Title as="h4">Rating: {show.rating.average}</Title>
               <Description dangerouslySetInnerHTML={getShowSummary()} />
               <Title as="h4">Genres:</Title>
               {show.genres.map(genre => (
                 <Tag key={genre}>{genre}</Tag>
               ))}
-            </div>
+            </DescriptionWrapper>
           </ContentWrapper>
           <EpisodesList episodes={episodes} />
         </Container>
