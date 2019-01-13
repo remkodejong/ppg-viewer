@@ -38,7 +38,8 @@ export default class StateContainer extends Container {
 
   getEpisode = async (season, episode) => {
     this.setState({
-      loading: true
+      loading: true,
+      currentEpisode: {}
     });
     await fetch(
       `http://api.tvmaze.com/shows/6771/episodebynumber?season=${season}&number=${episode}`
