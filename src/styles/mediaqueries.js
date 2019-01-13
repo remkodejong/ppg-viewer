@@ -24,7 +24,7 @@ export const mqFrom = Object.keys(sizes).reduce((acc, label) => {
 export const mqTo = Object.keys(sizes).reduce((acc, label) => {
   const emSize = (sizes[label] - 1) / 16;
   acc[label] = (...args) => css`
-    @media (min-width: ${emSize}em) {
+    @media (max-width: ${emSize}em) {
       ${css(...args)}
     }
   `;
