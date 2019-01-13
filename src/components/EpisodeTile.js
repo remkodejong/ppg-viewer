@@ -41,6 +41,7 @@ const EpisodeLink = styled(Link)`
 
   ${Title} {
     margin: 10px 0;
+    font-size: 1rem;
   }
 
   ${mqFrom.M`
