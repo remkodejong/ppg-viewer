@@ -9,7 +9,7 @@ class EpisodeTile extends Component {
   render() {
     const { episode } = this.props;
     return (
-      <EpisodeLink to={`episode/${episode.season}-${episode.number}`}>
+      <EpisodeLink to={`episode-${episode.season}-${episode.number}`}>
         {episode.image ? (
           <EpisodeThumbnail src={episode.image.medium} alt={episode.name} />
         ) : (

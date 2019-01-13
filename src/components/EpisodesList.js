@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import EpisodeTile from "./EpisodeTile";
 
-import { mqFrom } from "../styles/mediaqueries";
+import { mqFrom, mqTo } from "../styles/mediaqueries";
 import { Title } from "../styles/text";
 
 class EpisodesList extends Component {
@@ -48,9 +48,11 @@ const List = styled.ul`
   padding: 0;
   list-style: none;
 
-  li:nth-child(odd) {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+  ${mqTo.M`
+    li:nth-child(odd) {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  `}
 
   ${mqFrom.M`
     flex-flow: row nowrap;
